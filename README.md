@@ -1,4 +1,4 @@
-php-jwt-auth
+php-jwt-manager
 ======
 A class to decode, verify and generate tokens with the php-jwt library.
 
@@ -12,7 +12,7 @@ JSON Web Tokens are an easy way to authenticate an API. Unlikely in the traditio
 * JSON Web Tokens can be used in different languages: JWT libraries are available for several languages;
 * Practical : JSON Web Tokens are easy to pass in HTTP headers or through URLs;
 * Better Performance and Scalability: Since JSON Web Tokens are stateless, they reduce database queries and improve backend performance, as well, make it possible to have a distributed or clustered infrastructure that share the same authentication method.
-* Mobile Friendly: The token storage is not limited to cookies, they can be stored in mobile databases such as SQLite;
+* Mobile Friendly: The token storage is not limited to cookies, they can be stored in mobile databases;
 
 Installation:
 ------
@@ -22,11 +22,13 @@ Installation:
 2. Copy the contents of src to your selected subfolder.
 3. Include `JWTAuth.php` in your file with `require` or `require_once`.
 
+**Composer support will be available soon**
+
 Usage:
 ------
 
-### Instantiate JWT Class:  
-`$jwt = new JWTAuth();`
+### Instantiate JWTManager Class:  
+`$jwt = new JWTManager();`
 
 ### Generate a token:  
 In order to generate a token, we have to pass the extra data that will be in the token, for example:  
@@ -51,9 +53,7 @@ The method `decodeToken` will return a JSON:
  **Error**:  
  
  `{"valid":false,"message":"Expired token"}`  
- 
- **Note:** You can also convert the returned JSON to an associative array using `json_decode`.  
- 
+  
  Credits:
 ------
   
