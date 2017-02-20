@@ -3,7 +3,7 @@
 require './vendor/autoload.php';
 use \Firebase\JWT\JWT;
 
-class JWTAuth{
+class JWTManager{
     private $issuer;
     private $aud;
     private $issuedAt;
