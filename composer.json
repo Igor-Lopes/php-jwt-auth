@@ -1,5 +1,16 @@
 {
+    "name": "igor/php-jwt-manager",
+    "description": "A class to decode, verify and generate tokens with the php-jwt library",
+    "type": "library",
     "require": {
         "firebase/php-jwt": "^4.0"
-    }
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Igor Lopes",
+            "email": "igor@nucleus.eti.br"
+        }
+    ],
+    "minimum-stability": "dev"
 }
