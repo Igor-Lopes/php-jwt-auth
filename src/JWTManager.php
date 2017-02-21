@@ -1,8 +1,5 @@
 <?php
 
-require './vendor/autoload.php';
-use \Firebase\JWT\JWT;
-
 class JWTManager{
     private $issuer;
     private $aud;
