@@ -1,5 +1,7 @@
 <?php
 
+namespace Igor\JWT;
+
 use Firebase\JWT\JWT;
 
 class JWTManager{
