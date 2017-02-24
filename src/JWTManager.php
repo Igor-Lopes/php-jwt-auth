@@ -14,7 +14,7 @@ class JWTManager
 
         $this->options = array(
           'issuer' => 'www.yourdomain.com',
-          'subject' => 'test',
+          'subject' => 'subject',
           'audience' => $audience,
           'notBeforeSeconds' => 10,
           'expireSeconds' => 3600,
@@ -52,10 +52,9 @@ class JWTManager
 
         try {
             $decoded = (array) JWT::decode($jwt, $this->options['secret'], array('HS256'));
-            if ($decoded['aud'] === $_SERVER['HTTP_USER_AGENT'].$this->getIpAddress().gethostname()) {
+            if ($decoded['aud'] === $this->options['audience']) {
                 $data['valid'] = true;
-                $data['message'] = 'Token is valid';
-                $data['scope'] = $decoded['scope'];
+                $data['decoded'] = $decoded;
 
                 return json_encode($data);
             }
