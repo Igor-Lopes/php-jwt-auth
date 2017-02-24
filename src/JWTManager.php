@@ -4,44 +4,54 @@ namespace Igor\JWT;
 
 use Firebase\JWT\JWT;
 
-class JWTManager{
-    private $issuer;
-    private $aud;
-    private $issuedAt;
-    private $notBefore;
-    private $expire;
-    private $tokenKey;
+class JWTManager
+{
+    private $options;
 
-    public function __construct(){
-        $this->issuer = 'http://yourdomain.com';
-        $this->issuedAt = time();
-        $this->notBefore = $this->issuedAt + 10;
-        $this->expire = $this->notBefore + 60;
-        $this->aud = $_SERVER['HTTP_USER_AGENT'].$this->getIpAddress().gethostname();
-        $this->userBrowser = $_SERVER['HTTP_USER_AGENT'];
-        $this->tokenKey = 'YOUR_KEY_HERE';
+    public function __construct(array $options = [])
+    {
+        $audience = $_SERVER['HTTP_USER_AGENT'].$this->getIpAddress().gethostname();
+
+        $this->options = array(
+          'issuer' => 'www.yourdomain.com',
+          'subject' => 'test',
+          'audience' => $audience,
+          'notBeforeSeconds' => 10,
+          'expireSeconds' => 3600,
+          'algo' => array('HS256'),
+          'secret' => 'secret',
+      );
+
+        $this->options = array_replace($this->options, $options);
     }
 
-    public function encodeToken($scope){
+    public function encodeToken($scope = null)
+    {
+        $issuedAt = time();
+        $notBefore = $issuedAt + $this->options['notBeforeSeconds'];
+        $expire = $notBefore + $this->options['expireSeconds'];
+
         $token = array(
-            'iss' => $this->issuer,
-            'aud' => $this->aud,
-            'iat' => $this->issuedAt,
-            'nbf' => $this->notBefore,
-            'exp' => $this->expire,
+            'iss' => $this->options['issuer'],
+            'aud' => $this->options['audience'],
+            'sub' => $this->options['subject'],
+            'iat' => $issuedAt,
+            'nbf' => $notBefore,
+            'exp' => $expire,
             'scope' => $scope,
         );
 
-        $jwt = JWT::encode($token, $this->tokenKey);
+        $jwt = JWT::encode($token, $this->options['secret']);
 
         return $jwt;
     }
 
-    public function decodeToken($jwt){
+    public function decodeToken($jwt)
+    {
         JWT::$leeway = 60;
 
         try {
-            $decoded = (array) JWT::decode($jwt, $this->tokenKey, array('HS256'));
+            $decoded = (array) JWT::decode($jwt, $this->options['secret'], array('HS256'));
             if ($decoded['aud'] === $_SERVER['HTTP_USER_AGENT'].$this->getIpAddress().gethostname()) {
                 $data['valid'] = true;
                 $data['message'] = 'Token is valid';
@@ -49,6 +59,7 @@ class JWTManager{
 
                 return json_encode($data);
             }
+
             $data['valid'] = false;
             $data['message'] = 'Aud claim is invalid';
 
@@ -66,7 +77,8 @@ class JWTManager{
         }
     }
 
-    private function getIpAddress(){
+    private function getIpAddress()
+    {
         if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR'] != '') {
             return $_SERVER['HTTP_X_FORWARDED_FOR'];
         } else {
