@@ -56,23 +56,23 @@ class JWTManager
                 $data['valid'] = true;
                 $data['decoded'] = $decoded;
 
-                return json_encode($data);
+                return $data;
             }
 
             $data['valid'] = false;
             $data['message'] = 'Aud claim is invalid';
 
-            return json_encode($data);
-        } catch (Firebase\JWT\SignatureInvalidException $e) {
+            return $data;
+        } catch (\Firebase\JWT\SignatureInvalidException $e) {
             $data['valid'] = false;
             $data['message'] = $e->getMessage();
 
-            return json_encode($data);
-        } catch (Firebase\JWT\ExpiredException $e) {
+            return $data;
+        } catch (\Firebase\JWT\ExpiredException $e) {
             $data['valid'] = false;
             $data['message'] = $e->getMessage();
 
-            return json_encode($data);
+            return $data;
         }
     }
 
